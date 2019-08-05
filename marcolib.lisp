@@ -1,1 +1,27 @@
-(in-package :om);(let ((lib (om:find-library "marcolib")  ));  (unless (om::loaded? lib);    (om::load-om-lib lib)));-----------------------------------------------------------; MARCOLIB: what wasn't documented in Chroma and OMChroma! |;-----------------------------------------------------------(mapc  #'(lambda (file)     (compile&load (merge-pathnames file *load-pathname*)))  '(   "marco-sources/ms-init"   "marco-sources/back-from-om"   "marco-sources/ms-globals"   "marco-sources/ms-utils" )); if the current workspace has already been loaded,; load the library; otherwise load it only once the workspace has been loaded;(if om::*current-workspace*;  (init-cr-env);  (om::add-init-user-func 'init-cr-env))
+(in-package :om)
+
+;(let ((lib (om:find-library "marcolib")  ))
+;  (unless (om::loaded? lib)
+;    (om::load-om-lib lib)))
+
+;-----------------------------------------------------------
+; MARCOLIB: what wasn't documented in Chroma and OMChroma! |
+;-----------------------------------------------------------
+
+(mapc 
+ #'(lambda (file)
+     (compile&load (merge-pathnames file *load-pathname*)))
+ 
+ '(
+   "marco-sources/ms-init"
+   "marco-sources/back-from-om"
+   "marco-sources/ms-globals"
+   "marco-sources/ms-utils"
+ ))
+
+; if the current workspace has already been loaded,
+; load the library
+; otherwise load it only once the workspace has been loaded
+;(if om::*current-workspace*
+;  (init-cr-env)
+;  (om::add-init-user-func 'init-cr-env))
