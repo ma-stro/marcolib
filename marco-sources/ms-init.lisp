@@ -87,6 +87,13 @@
           (make-pathname :directory (append
                                      (pathname-directory (get-gbl '*MSdb*))
                                      (list "wt-snd")))))
+
+  ; GENS
+(set-gbl '*LLve*
+         (ensure-directories-exist
+          (make-pathname :directory (append
+                                     (pathname-directory (get-gbl '*MSdb*))
+                                     (list "ve")))))
   
 ;-----------------------------------------------------------------------------
 #|

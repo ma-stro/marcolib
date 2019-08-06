@@ -5,7 +5,7 @@
 ;-------| By Marco Stroppa
 ;-------| Copyright 2000 IRCAM
 ;*****************************************************************************
-(in-package chroma)
+(in-package :cr)
 
 ; PACKAGE TO DEAL WITH DYNAMIC VIRTUAL ENVELOPES
 ;                 ASSOCIATED TYPE NAME: DVE
@@ -28,6 +28,7 @@
 ;            contained in DYN-GENS-LIST if it is not empty and write them onto
 ;            the file GEN-FILE in the directory LLfun.
 
+; STILL NEEDED?
 
 ; CURRENT IMPLEMENTATION:
 ;	hash-table with a FUN and a number
@@ -124,8 +125,8 @@ Only its number will be dynamicall allocated"
         (let ((curr-num (get-free-gen-num)))
           (setf (gethash curr-num (contents dve)) fun)
           (if (is_fun fun)
-            (format t "DVE n. ~a~%" curr-num)
-            (format t "RAW n. ~a~%" curr-num))
+            (print (format () "DVE n. ~a~%" curr-num))
+            (print (format t "RAW n. ~a~%" curr-num)))
           curr-num))))
 
 (defun rm_dve (key &optional (dve (get-gbl 'DYN-GENS-LIST)))
@@ -179,25 +180,25 @@ Only its number will be dynamicall allocated"
 (defun print_dve (dve)
   (let ((hash-table (contents dve)))
 
-    (format t "DYNAMIC VIRTUAL ENVELOPE - STRUCTURE OF TYPE : ~a~%" (pls-type dve))
-    (format t "   ~a ENTRIES~%" (hash-table-count hash-table))
+    (print (format () "DYNAMIC VIRTUAL ENVELOPE - STRUCTURE OF TYPE : ~a~%" (pls-type dve)))
+    (print (format () "   ~a ENTRIES~%" (hash-table-count hash-table)))
 
     (with-hash-table-iterator (next-entry hash-table)
       (loop
         (multiple-value-bind (more? num fun) (next-entry)
           (unless more? (return))
-          (format t "     KEY: ~a~%     VALUE: ~a~%~%" num (contents fun)))))))
+          (print (format () "     KEY: ~a~%     VALUE: ~a~%~%" num (contents (eval fun)))))))))
 
 
 (defun short-print_dve (dve)
   (let ((hash-table (contents dve)))
-    (format t "DVE: ~a ENTRIES~%" (hash-table-count hash-table))
+    (print (format () "DVE: ~a ENTRIES~%" (hash-table-count hash-table)))
 
     (with-hash-table-iterator (next-entry hash-table)
       (loop
         (multiple-value-bind (more? num fun) (next-entry)
           (unless more? (return))
-          (format t "     ~a | ~a~%" num (contents fun)))))))
+          (print (format () "     ~a | ~a~%" num (contents (eval fun)))))))))
 
 
 

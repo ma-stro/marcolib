@@ -21,41 +21,41 @@
 ; (load-db name)
 
 (defun load-db (name)
+(declare (special *MSdb*))
 "Load a given data base from $LLdb
-The extension of the file to be loaded is : "name"_db.lisp"
+The extension of the file to be loaded is : <name>_db.lisp"
   (cond
    ((null name) 'done)
-   ((symbolp name)
+   ((or (symbolp name) (stringp name))
     (let* ((name (format () "~a_db.lisp" name))
            (path (merge-pathnames
                   (make-pathname
                    :directory (append
-                               (pathname-directory (getenv 'LLdb))
+                               (pathname-directory (get-gbl *MSdb*))
                                ))
                   name)))
-      (format t "Loading ~a~%" path)
+      (print (format () "Loading ~a~%" path))
       (load path)) )
    ((listp name)
     (load-db (car name))
     (load-db (cdr name)))
    (t (error "ILLEGAL ARGUMENT: ~a" name))))
-
   
 ;-----------------------------------------------------------------------------
 (defun load-ve (name)
-"Load-ve loads a data base of virtual envelopes that is un LLdb/ve
-"
+(declare (special *LLve*)) 
+"Load-ve loads a data base of virtual envelopes that is in LLve/ve"
   (cond
    ((null name) 'done)
-   ((symbolp name)
-    (let* ((name (format () "~a_db.lisp" name))
+   ((or (symbolp name) (stringp name))
+    (let* ((name (format () "~a_ve.lisp" name))
            (path (merge-pathnames
                   (make-pathname
                    :directory (append
-                               (pathname-directory (getenv 'LLdb))
-                               (list "ve")))
+                               (pathname-directory (get-gbl *LLve*))
+                               ))
                   name)))
-      (format t "Loading ~a~%" path)
+      (print (format () "Loading ~a~%" path))
       (load path)) )
    ((listp name)
     (load-ve (car name))

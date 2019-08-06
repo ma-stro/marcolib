@@ -71,6 +71,13 @@
 (set-gbl '-xp14+ (interval -2300))
 
 ;-----------------------------------------------------------------------------
+; values needed by dve
+(set-gbl 'GEN-MIN 1000)
+(set-gbl 'GEN-MAX 6999)
+(set-gbl 'GEN-CURR (get-gbl 'GEN-MIN))
+(set-gbl 'GEN-FILE *LLve*)
+(set-gbl 'DYN-GENS-LIST (make_dve))
+;-----------------------------------------------------------------------------
 ;(set-gbl 'WTDIR (catenate "/snd/" (getenv "USER")))
 				; DIR OF SOUND FILES ON MARC TO LOAD ON MOON
 ; Temporary place for the dynamically computed GENS of a WT object
@@ -86,7 +93,7 @@
 ;			   input sf sndin.{position-in-A-list} [symbolic link]
 				; DIR OF SOUND FILES ON MARC TO LOAD ON MOON
 
-(set-gbl 'WTFO 5000)		; OFFSET WHEN WRITING CSOUND GEN 1 TABLES
+(set-gbl 'WTFO 7000)		; OFFSET WHEN WRITING CSOUND GEN 1 TABLES
 (set-gbl 'WTFOMAX 9999)		; MAXIMUM OFFSET WHEN WRITING CSOUND GEN 1
                                 ; PAY ATTENTION THAT IT IS NOT OVERLAPPING WITH
                                 ;  THE AUTOMATIC TABLE NUMBER IN OM PREFERENCES
