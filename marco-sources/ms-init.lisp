@@ -67,6 +67,13 @@
   
   ;-----------------------------------------------------------------------------
   ;PERSONAL DATA
+  ; ORCHESTRAS CORRESPONDING TO LISP CLASSES
+(set-gbl '*MSorc*
+         (ensure-directories-exist
+          (make-pathname :directory (append
+                                     (pathname-directory (get-gbl '*MSDATA*))
+                                     (list "ms-orc")))))
+
   ; DATA BASES
 (set-gbl '*MSdb*
          (ensure-directories-exist

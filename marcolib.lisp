@@ -17,7 +17,21 @@
    "marco-sources/back-from-om"
    "marco-sources/ms-globals"
    "marco-sources/ms-utils"
+
+   "marco-sources/pls/dve"
+
+   "marco-sources/dg/ms-utils-dg"
+   "marco-sources/dg/DP"
+
+   "marco-sources/marco-classes/ad1m"
+   "marco-sources/marco-classes/ad1s"
+
+   "marco-sources/userfuns/test-user-funs"
+
  ))
+
+;(cl-user::clean-sources (make-pathname :directory (append (pathname-directory *load-pathname*) '("marco-sources"))))
+
 
 ; if the current workspace has already been loaded,
 ; load the library

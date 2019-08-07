@@ -71,8 +71,6 @@
                      :size 500          ; average size
                      )) )
 
-
-
 ;	NAME:		fun_/num_dve  (SELECTOR)
 ;	TYPE:		Expr with 1 or 2 arguments
 ;	CALL:		(fun_dve fun [dve])
@@ -223,6 +221,11 @@ Only its number will be dynamicall allocated"
 
 (defun count-keys_dve (dve)
   (hash-table-count (contents dve)))
+
+;==================================================================
+;; GLOBAL VARIABLE DEPENDING ON THIS FILE
+(set-gbl 'DYN-GENS-LIST (make_dve))
+;==================================================================
 
 ;==================================================================
 ; SUBSIDIARY FUNCTIONS FOR DVE

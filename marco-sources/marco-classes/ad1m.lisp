@@ -1,41 +1,41 @@
 ;******************************************************************
-;		     CLASS AD1S-RT
-; 	      Root class for the class AD1S
+;		     CLASS AD1M-RT
+; 	      Root class for the class AD1M
 ;******************************************************************
 
-(in-package om)
+(in-package :om)
 
 ; LISP-DEFINED CLASSES SHOULD RESIDE IN THE LIBRARY'S PACKAGE AND 
 ;   NOT IN THE USER PACKAGE, WHICH CONTAINS ALL THE CLASSES
 ;   GRAPHICALLY DEFINED
 
-(defclass! ad1s-rt
+(defclass! ad1m-rt
   (cs-evt)
   (
    ( source-code :initform
                  (load-buffer-textfile
-                  (get-orc-source (get-orc "ad1s"))
+                  (get-orc-source (get-orc "ad1m" :local))
                   'textfile "append")
                  :allocation :class
                  :type textfile
                  :accessor source-code)
-   ( numchan :initform (or (get-orc-channels (get-orc "ad1s")) 1)
+   ( numchan :initform (or (get-orc-channels (get-orc "ad1m")) 1)
              :allocation :class  :accessor numchan)
    ( globals-list :initform 
                   (get-orc-globals
-                   (get-orc "ad1s"))
+                   (get-orc "ad1m"))
                   :allocation :class
                   :type list
                   :accessor globals-list)
    ( macros-list :initform 
-                 (get-orc-macros (get-orc "ad1s"))
+                 (get-orc-macros (get-orc "ad1m"))
                  :allocation :class
                  :type list
                  :accessor macros-list)
    (orc-header :initform (list
                           "; DEFAULT GENs **********************************************************"
                           "; audio wave, sine"
-                          "f1  0   65537   10 1"
+                          "f1  0   524289   10 1"
                           "; vibrato wave, sine"
                           "f2  0   65537  10 1"
                           "; tremolo wave, sine"
@@ -111,23 +111,6 @@
 		:initarg :pdur 
   		:initform 0.1
 		:accessor pdur)
-   ( az 	:type number
-		:initarg :az 
-  		:initform -1.0
-		:accessor az)
-   ( azmax 	:type number
-		:initarg :azmax 
-  		:initform 1.0
-		:accessor azmax)
-   ( azenv	:type cs-table
-		:initarg :azenv 
-                                               ; x-points y-points decimals
-  		:initform (make-cs-table  'Gen07  '(0 65536) '(0 1) 1 "?" 65537)
-		:accessor azenv)
-   ( azdur	:type number
-		:initarg :azdur 
-  		:initform 0.0
-		:accessor azdur)
    ( afil 	:type number
 		:initarg :afil 
   		:initform 1
@@ -136,8 +119,8 @@
   (:documentation
    "
 ;=============================================================================
-;		AD1s.ORC
-; ADDITIVE SYNTHESIS INSTRUMENT N. 11 / COMPLETE / STEREO
+;		AD1m.ORC
+; ADDITIVE SYNTHESIS INSTRUMENT N. 12 / COMPLETE / MONO
 ;=============================================================================
 ; NB: NEW STRUCTURE FOR THE AMPLITUDES FROM AUGUST 2008!
 ;    Positive value > 0.0  : linear amplitude (>0.0-1000.0)
@@ -172,11 +155,7 @@
 ; p17	= upper interval for portamento [semitones]
 ; p18	= portamento envelope [GEN]
 ; p19	= portamento duration [sec]
-; p20	= min stereo pan [-1=left, 1=right, 0=centre]
-; p21	= max stereo pan
-; p22	= stereo pan envelope [GEN]
-; p23	= duration of stereo pan [sec]
-; p24	= audio fun [GEN]
+; p20	= audio fun [GEN]
 ;-----------------------------------------------------------------------------
 ; COMPULSORY GEN FUNCTIONS :
 ;	f1	audio wave (sine)
@@ -222,12 +201,6 @@
 ; PENV	: portamento envelope [GEN] (asc line)
 ; PDUR	: portamento duration [sec] (0.1)
 
-;  SPATIAL PROJECTION
-; AZ   	: min stereo pan [-1=left, 1=right, 0=centre, equal power] (-1.0)
-; AZMAX	: max stereo pan [-1=left, 1=right, 0=centre, equal power] (1.0)
-; AZENV	: envelope for the stereo pan [GEN] (asc line)
-; AZDUR	: duration of stereo pan's envelope [sec, if=0, take global dur] (0.0)
-
 ; AFIL	: audio function [GEN] (1=sine)
 ;=============================================================================
 ;  SUB-COMPONENTS
@@ -253,11 +226,11 @@
 ;******************************************************************
 ;			SUB-CLASSES
 ;******************************************************************
-; AD1S
+; AD1M
 ;------------------------------------------------------------------
 
-(defclass! ad1s
-  (ad1s-rt)
+(defclass! ad1m
+  (ad1m-rt)
   (
    ; GLOBAL SLOTS: THE METHOD BELOW TRANSFORMS THEM INTO GLOBAL SLOTS
    ;    ATTENTION: A GLOBAL SLOT SHOULD NOT HAVE AN INITARG
@@ -289,7 +262,7 @@
           :accessor amp2))
   (:documentation
    "
-Extension of the instrument ADD1s, class ad1s-rt.
+Extension of the instrument ADD1m, class ad1m-rt.
 
 Added global slots:
   durtot [sec] = total duration of the whole event
@@ -317,7 +290,7 @@ Added local slots:
 ; ADD SOME GLOBAL SLOTS (THE FIRST ONES ON THE LEFT OF A CLASS BOX)
 ;     THIS METHOD MUST BE DEFINED FOR THIS CLASS
 
-(defmethod get-slot-in-out-names ((self ad1s))
+(defmethod get-slot-in-out-names ((self ad1m))
 ; MEANING OF THE FIELDS:
 ;   SLOT NAMES (THE FIRST 4 ARE THE DEFAULT ONES)
 ;   DEFAULT VALUES
@@ -335,13 +308,13 @@ Added local slots:
 
 
 ; SPECIFY WHICH ARE THE GLOBAL SLOTS
-(defmethod fixed-slots-list ((x om::ad1s))
+(defmethod fixed-slots-list ((x om::ad1m))
   "Specifies the fixed (global) slots for this class"
   '(numrows action-time user-fun durtot amptot))
 
 
 ; ELIMINATE THE LAST 5 SLOTS IN THE INSTRUMENT (NOT NEEDED IN THE SCORE)
-(defmethod nullslots ((x om::ad1s))
+(defmethod nullslots ((x om::ad1m))
   "Eliminate the last 5 slots from the score"
   5)
 ;******************************************************************

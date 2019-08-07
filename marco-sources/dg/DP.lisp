@@ -13,7 +13,7 @@
 ;    AND DF.ll (VALUES OR FUNCTIONS CONTROLLING POINTERS, SEE THE FILES DPV.ll
 ;    AND DPF.ll)
 ; IN ADDITION, WHEN THE POINTER IS NOT INTEGER, ONE CAN CHOOSE BETWEEN
-;    INTERPOLATING BETWEEN EITHER /THE TWO ADJACENT VALUES OR TRUNCATING
+;    INTERPOLATING BETWEEN EITHER THE TWO ADJACENT VALUES OR TRUNCATING
 ;    THE POINTER TO THE CLOSEST INTEGER. FOR INSTANCE, IF i1=10 and i2=20,
 ;    A POINTER OF 1.3 WILL YIELD RESPECTIVELY 13 OR 10.
 ; THE NAMES OF THE FUNCTIONS ARE THE SAME AS DV AND DF, WITH THE PREFIX
@@ -47,7 +47,7 @@
 ; (vind VECT VAL [PREC])
 ; 	return the index of the first place = VAL+/-PREC in VECT
 ;	return () if nothing is found
-;	PREC = precision in the computation (0.0 by default)
+;	PREC = precision in the computation (0.0 by default), absolute value
 ; EX: (setf a #(0 .5 1 2 3 4 5)), (vind a 2.1 0.3) ===> 6
 (defun vind (vect val &rest prec)
   (let ((prec (ifn prec 0.0 (car prec)))
@@ -77,7 +77,7 @@
     (if (not (and (numberp val-low) (numberp val-high)) )
       (error
        "COME ON, ~a, CAN'T INTERPOLATE IF THE VALUES AREN'T NUMBERS: ~a~%"
-       (getenv 'USER) (cons val-low val-high))
+       (get-gbl 'USER) (cons val-low val-high))
       (if (= ind-low ind-high)
         val-low
         (+ val-low
@@ -93,11 +93,14 @@
 ;	if VAL = (), choose the ALT limit
 ;	   else if VAL > TEST choose TEST, else return VAL
 (defun ovfl-pr (val alt test)
-  (ifn val
-       alt
-    (if (> (car val) test)
-      test
-      (car val))) )
+  (cond ((null val)
+         alt)
+        ((numberp val)
+         (if (> val test) test val))
+        (t
+         (if (> (car val) test)
+             test
+           (car val))) ))
 
 ;-----------------------------------------------------------------------------
 ; (adjust-limits ())		; USE DYN SCOPING
@@ -127,7 +130,7 @@ CALLED BY: ~a~%"
 
 ;-----------------------------------------------------------------------------
 ; (p-set-result / pi-set-result)		; DYN SCOPING
-;	prepare the final list by getting the values pointed to by a caontrol
+;	prepare the final list by getting the values pointed to by a control
 ;	   list (cl) with test and clipping if they overflow
 (defun p-set-result ()
   (declare (special cl db nev to from result))

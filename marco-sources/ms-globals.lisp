@@ -76,7 +76,6 @@
 (set-gbl 'GEN-MAX 6999)
 (set-gbl 'GEN-CURR (get-gbl 'GEN-MIN))
 (set-gbl 'GEN-FILE *LLve*)
-(set-gbl 'DYN-GENS-LIST (make_dve))
 ;-----------------------------------------------------------------------------
 ;(set-gbl 'WTDIR (catenate "/snd/" (getenv "USER")))
 				; DIR OF SOUND FILES ON MARC TO LOAD ON MOON
