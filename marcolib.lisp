@@ -25,6 +25,7 @@
 
    "marco-sources/marco-classes/ad1m"
    "marco-sources/marco-classes/ad1s"
+   "marco-sources/marco-classes/fm1m"
 
    "marco-sources/userfuns/test-user-funs"
 

@@ -91,11 +91,11 @@ fq[i] > SR/2 => discard component
    (let ((sr2 (if (find-package 'cr)
                   (cr::get-gbl 'cr::sr/2)
                   22050)))
-   (if (> (comp-field c "fq") sr2)
+   (if (> (comp-field c "freq") sr2)
      (list
       (format () ";*****ERROR: FQ > Nyquist: ~a~%;    Component n. ~a discarded~%"
-              (comp-field c "fq") (index c))
-      (progn (comp-field c "fq" (* -1.0 (comp-field c "fq")))
+              (comp-field c "freq") (index c))
+      (progn (comp-field c "freq" (* -1.0 (comp-field c "fq")))
              "j'ai change")) ; TEST FOR TESTING: RETURN AN ERROR AND THE NEGATIVE FREQUENCY
        c)))
 
@@ -108,11 +108,11 @@ fq[i] > SR/2 => discard component
    (let ((sr2 (if (find-package 'cr)
                   (cr::get-gbl 'cr::sr/2)
                   22050)))
-   (if (> (comp-field c "fq") sr2)
+   (if (> (comp-field c "freq") sr2)
      (list
-      (comp-field c "fq" (* -1.0 (comp-field c "fq")))
+      (comp-field c "freq" (* -1.0 (comp-field c "fq")))
       (format () ";*****ERROR: FQ > Nyquist: ~a~%;    Component n. ~a discarded~%"
-              (comp-field c "fq") (index c))
+              (comp-field c "freq") (index c))
       ) ; TEST FOR TESTING: RETURN THE NEGATIVE FREQUENCY AND AN ERROR
        c)))
 
@@ -128,7 +128,7 @@ fq[i] > SR/2 => discard component
          (sr2 (if (find-package 'cr)
                   (cr::get-gbl 'cr::sr/2)
                   22050)))
-   (if (> (comp-field c "fq") sr2)
+   (if (> (comp-field c "freq") sr2)
      'HELLO-WORLD ; TEST FOR TESTING: RETURN A SYMBOL (ANYTHING)
        c)))
 

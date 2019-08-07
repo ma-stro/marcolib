@@ -19,16 +19,16 @@
                  :allocation :class
                  :type textfile
                  :accessor source-code)
-   ( numchan :initform (or (get-orc-channels (get-orc "ad1m")) 1)
+   ( numchan :initform (or (get-orc-channels (get-orc "ad1m" :local)) 1)
              :allocation :class  :accessor numchan)
    ( globals-list :initform 
                   (get-orc-globals
-                   (get-orc "ad1m"))
+                   (get-orc "ad1m" :local))
                   :allocation :class
                   :type list
                   :accessor globals-list)
    ( macros-list :initform 
-                 (get-orc-macros (get-orc "ad1m"))
+                 (get-orc-macros (get-orc "ad1m" :local))
                  :allocation :class
                  :type list
                  :accessor macros-list)
