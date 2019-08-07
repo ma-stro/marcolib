@@ -314,7 +314,10 @@ Added local slots:
 
 
 ; ELIMINATE THE LAST 5 SLOTS IN THE INSTRUMENT (NOT NEEDED IN THE SCORE)
-(defmethod nullslots ((x om::ad1m))
-  "Eliminate the last 5 slots from the score"
-  5)
+;(defmethod nullslots ((x om::ad1m))
+;  "Eliminate the last 5 slots from the score"
+;  5)
+
+(defmethod add-n-slots ((self om::ad1m)) -5)
+
 ;******************************************************************
