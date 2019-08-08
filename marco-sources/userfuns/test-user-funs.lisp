@@ -85,7 +85,7 @@ Return a symbol. Nothing is written in the score
 (defmethod fq-sr1? ((c component))
 "
 FOR TESTING PURPOSES ONLY
-fq[i] > SR/2 => discard component
+fq[i] > SR/2 => Invert sign of freq and print it as is
 "
 (declare (special cr::sr/2 index))
    (let ((sr2 (if (find-package 'cr)
@@ -93,16 +93,18 @@ fq[i] > SR/2 => discard component
                   22050)))
    (if (> (comp-field c "freq") sr2)
      (list
-      (format () ";*****ERROR: FQ > Nyquist: ~a~%;    Component n. ~a discarded~%"
+      (format () ";*****fq-sr1? - ERROR: FQ > Nyquist: ~a~%;    Inverted freq's sign of component ~a~%"
               (comp-field c "freq") (index c))
-      (progn (comp-field c "freq" (* -1.0 (comp-field c "fq")))
-             "j'ai change")) ; TEST FOR TESTING: RETURN AN ERROR AND THE NEGATIVE FREQUENCY
+      (progn (comp-field c "freq" (* -1.0 (comp-field c "freq")))
+             "CHANGED SIGN TO FREQ")
+      c) ; TEST FOR TESTING: RETURN AN ERROR AND THE NEGATIVE FREQUENCY (MUST RETURN THE WHOLE COMPONENT)
        c)))
+
 
 (defmethod fq-sr2? ((c component))
 "
 FOR TESTING PURPOSES ONLY
-fq[i] > SR/2 => discard component
+fq[i] > SR/2 => test successful (car of the list is a component), component printed
 "
 (declare (special cr::sr/2 INDEX))
    (let ((sr2 (if (find-package 'cr)
@@ -110,14 +112,63 @@ fq[i] > SR/2 => discard component
                   22050)))
    (if (> (comp-field c "freq") sr2)
      (list
-      (comp-field c "freq" (* -1.0 (comp-field c "fq")))
-      (format () ";*****ERROR: FQ > Nyquist: ~a~%;    Component n. ~a discarded~%"
+      (comp-field c "freq" (* -1.0 (comp-field c "freq")))
+      (format () ";*****fq-sr2? - ERROR: FQ > Nyquist: ~a~%;    Component n. ~a discarded~%"
               (comp-field c "freq") (index c))
-      ) ; TEST FOR TESTING: RETURN THE NEGATIVE FREQUENCY AND AN ERROR
+;      (comp-field c "freq" (* -1.0 (comp-field c "freq")))
+      ) ; HERE ONLY PRINT THE ERROR MESSAGE, BUT DO NOT RETURN THE COMPONENT
        c)))
+
+; IF THE FIRST ELEMENT OF THE LIST IS A COMPONENT, WHICH IS WHAT IS RETURNED BY COMP-FIELD
+; THE TEST IS SUCCESSFUL AND THE COMPONENT IS PRINTED IN THE SCORE WITH THE FOLLOWING COMMENT
 
 
 (defmethod fq-sr3? ((c component))
+"
+FOR TESTING PURPOSES ONLY
+fq[i] > SR/2 => test failed, component printed (because it is in the list)
+"
+(declare (special cr::sr/2 INDEX))
+   (let ((sr2 (if (find-package 'cr)
+                  (cr::get-gbl 'cr::sr/2)
+                  22050)))
+   (if (> (comp-field c "freq") sr2)
+     (list
+;      (comp-field c "freq" (* -1.0 (comp-field c "freq")))
+      (format () ";*****fq-sr3? - ERROR: FQ > Nyquist: ~a~%;    Component n. ~a NOT discarded~%"
+              (comp-field c "freq") (index c))
+      (comp-field c "freq" (* -1.0 (comp-field c "freq")))
+      ) ; HERE ONLY PRINT THE ERROR MESSAGE, BUT DO NOT RETURN THE COMPONENT
+       c)))
+
+; THE TEST FAILS, BUT THE COMPONENT IS STILL WRITTEN IN THE SCORE BECAUSE IT IS IN THE RETURNED LIST
+
+
+
+(defmethod fq-sr4? ((c component))
+"
+FOR TESTING PURPOSES ONLY
+fq[i] > SR/2 => test failed, component printed (because it is in the list)
+"
+(declare (special cr::sr/2 INDEX))
+   (let ((sr2 (if (find-package 'cr)
+                  (cr::get-gbl 'cr::sr/2)
+                  22050)))
+   (if (> (comp-field c "freq") sr2)
+     (list
+;      (comp-field c "freq" (* -1.0 (comp-field c "freq")))
+      (format () ";*****fq-sr4? - ERROR: FQ > Nyquist: ~a~%;    Component n. ~a discarded~%"
+              (comp-field c "freq") (index c))
+;      (comp-field c "freq" (* -1.0 (comp-field c "freq")))
+      ) ; HERE ONLY PRINT THE ERROR MESSAGE, BUT DO NOT RETURN THE COMPONENT
+       c)))
+
+; THE TEST FAILS, AND THE COMPONENT IS NOT WRITTEN IN THE SCORE (JUST THE ERROR MESSAGE)
+
+
+
+
+(defmethod fq-sr5? ((c component))
 "
 FOR TESTING PURPOSES ONLY
 fq[i] > SR/2 => discard component
@@ -129,8 +180,10 @@ fq[i] > SR/2 => discard component
                   (cr::get-gbl 'cr::sr/2)
                   22050)))
    (if (> (comp-field c "freq") sr2)
-     'HELLO-WORLD ; TEST FOR TESTING: RETURN A SYMBOL (ANYTHING)
+     'fq-sr3-HELLO-WORLD 
        c)))
+
+; TEST FOR TESTING: RETURN A SYMBOL (ANYTHING) -> DOES NOTHING, TEST FAILS, NOTHING IS PRINTED
 
 #|
 not (0 <= bal[i] <= 1)	set to 0 or 1 / DONE WITHIN THE ORCHESTRA FILE

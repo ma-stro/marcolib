@@ -15,7 +15,7 @@
 
 (defun test-gen2fun ()
   '(
-   "f11 0 513 7  -1 512 0"
+   "f11 0 513 7  -1 256 0 256 1"
    "f12 0 513 7   1 512 0"
    "f13 0 513 7   0 512 1"
    "f14 0 513 5   0 512 1"
@@ -40,10 +40,15 @@
       str))))
 
 (defun make-crfun (begval othervals gensize)
+(print othervals)
   (let ((l-vals (list begval 0.0)))
+    (loop for x in othervals for y in (cdr othervals) by 2 do
+          (print x)
+          (print y))))
+
     l-vals))
 
-(csgen-to-fun (nth 4 (test-gen2fun))  )
+(csgen-to-fun (nth 0 (test-gen2fun))  )
 
 
 ;-------------------------------------------------------------------
@@ -64,7 +69,8 @@
 
 
 
-(string-to-list "f11 0 513 7  -1 513 0")
+
+(length (string-to-list "i1 1.000 1.000 -6.000 440.000 0.010 0.050 1000.000 0.100 0.100 5.000 0.500 6.000 1.000 1001.000 -1.000 0.000 1002.000 0.100 1.000 3.000 0.060 0.010 -1.000 -1.000"))
 ;(string2list 1)
 (string-to-list '(a b c d))
 
