@@ -1,5 +1,9 @@
 (in-package :om)
 
+(let ((lib (om:find-library "OMChroma")  ))
+  (unless (om::loaded? lib)
+    (om::load-om-lib lib)))
+
 ;(let ((lib (om:find-library "marcolib")  ))
 ;  (unless (om::loaded? lib)
 ;    (om::load-om-lib lib)))
