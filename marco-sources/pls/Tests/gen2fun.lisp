@@ -15,7 +15,7 @@
 
 
 ;-------------------------------------------------------------------
-(defun csgen-to-fun (csgen)
+(defun csgen->fun (csgen)
   (let ((str (string-to-list csgen)))
     (if (or (= (fourth str) 7) (= (fourth str) 5))
         (make-crfun (fifth str) (cdr (cddddr str)) (third str))
@@ -48,7 +48,7 @@
    "f14 0 513 5   0 512 1"
    "f15 0 513 1   0 512 1"
    "f16 0 513 7   0 512 -1") )
-(csgen-to-fun (nth 0 (test-gen2fun))  )
+(csgen->fun (nth 0 (test-gen2fun))  )
 (first (string-to-list "f11 0 7 513 0 2 3 4 5"))
 (fun->gen-cs-table (make_fun '(-1 0  0 2048  1 4097)) )
 (fun-points (make_fun '(-1 0  0 2048  1 4096)) 4097)

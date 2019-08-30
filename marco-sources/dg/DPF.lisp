@@ -9,7 +9,7 @@
 ; THIS FILE CONTAINS ALL THE FUNCTIONS THAT GENERATE DATA PASSED AS POINTERS
 ;    TO A DATA BASE
 
-(in-package chroma)
+(in-package :cr)
 
 ;-----------------------------------------------------------------------------
 ; AVAILABLE FUNCTIONS

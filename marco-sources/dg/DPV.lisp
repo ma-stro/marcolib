@@ -9,7 +9,7 @@
 ; THIS FILES CONTAINS ALL THE FUNCTIONS THAT GENERATE DATA PASSED AS POINTERS
 ;    TO A DATA BASE
 
-(in-package chroma)
+(in-package :cr)
 ;-----------------------------------------------------------------------------
 ; AVAILABLE FUNCTIONS
 ;    FUNCTIONS WITH CONTROL LIST (CL)
@@ -206,8 +206,10 @@
     (let ((rest
            (if (listp (car (last cl)) )
              (copy-tree (car (last cl)))
-             (error "IRREGULAR CONTROL LIST FOR REPEATED LOOPS, SIR: ~a~%"
-                    cl)) )
+             (copy-tree (last cl))))
+; corrected, Marco, 190830, more flexible behaviour
+;            (error "IRREGULAR CONTROL LIST FOR REPEATED LOOPS, SIR: ~a~%"
+;                   cl)) )
           (start (firstn (1- (length cl)) cl)) )
       (setq cl (firstn nev
                        (append start (nconc rest rest)))) )
@@ -225,8 +227,10 @@
     (let ((rest
            (if (listp (car (last cl)) )
              (copy-tree (car (last cl)))
-             (error "IRREGULAR CONTROL LIST FOR REPEATED LOOPS, SIR: ~a~%"
-                    cl)) )
+             (copy-tree (last cl))))
+; corrected, Marco, 190830, more flexible behaviour
+;            (error "IRREGULAR CONTROL LIST FOR REPEATED LOOPS, SIR: ~a~%"
+;                   cl)) )
           (start (firstn (1- (length cl)) cl)) )
       (setq cl (firstn nev
                        (append start (nconc rest rest)))) )
@@ -248,8 +252,10 @@
     (let ((rest
            (if (listp (car (last cl)) )
              (copy-tree (car (last cl)))
-             (error "IRREGULAR CONTROL LIST FOR REPEATED LOOPS, SIR: ~a~%"
-                    cl)) )
+             (copy-tree (last cl))))
+; corrected, Marco, 190830, more flexible behaviour
+;            (error "IRREGULAR CONTROL LIST FOR REPEATED LOOPS, SIR: ~a~%"
+;                   cl)) )
           (start (firstn (1- (length cl)) cl)) )
       (nconc rest (reverse rest))
       (setq cl (firstn nev
@@ -268,8 +274,10 @@
     (let ((rest
            (if (listp (car (last cl)) )
              (copy-tree (car (last cl)))
-             (error "IRREGULAR CONTROL LIST FOR REPEATED LOOPS, SIR: ~a~%"
-                    cl)) )
+             (copy-tree (last cl))))
+; corrected, Marco, 190830, more flexible behaviour
+;            (error "IRREGULAR CONTROL LIST FOR REPEATED LOOPS, SIR: ~a~%"
+;                   cl)) )
           (start (firstn (1- (length cl)) cl)) )
       (nconc rest (reverse rest))
       (setq cl (firstn nev

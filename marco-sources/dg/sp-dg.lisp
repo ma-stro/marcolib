@@ -8,7 +8,7 @@
 
 ; THIS FILES CONTAINS SPECIAL-PURPOSE FUNCTIONS TO USE WITH DG SYS
 
-(in-package chroma)
+(in-package :cr)
 ;-----------------------------------------------------------------------------
 ; AVAILABLE FUNCTIONS
 ;	chk-dur
@@ -30,9 +30,10 @@
 ;	extract 1 item from a data-base of virtual envelopes (type ve)
 ;       argument x is FROM / TO fields of p-l-val
 ; EX: (setf db #(f-11 f-12 f-13))
-;      (p-ve 1 db) ===> (eval f-11)
+;      (p-ve 0 db) ===> (eval f-11)
 (defun p-ve (val db &rest x)
     (eval
 	(car
-	    (apply 'p-l-val (append (list 1 (list (1- val)) db) x)) )) )
+	    (apply 'p-l-val (append (list 1 (list val) db) x)) )) )
+;	    (apply 'p-l-val (append (list 1 (list (1- val)) db) x)) )) )
 ;-----------------------------------------------------------------------------

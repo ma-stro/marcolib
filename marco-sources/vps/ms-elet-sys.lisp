@@ -9,7 +9,7 @@
 ;	GENERATION ALONE
 ;------------------------------------------------------------------
 
-(in-package chroma)
+(in-package :cr)
 
 ;-----------------------------------------------------------------------------
 ; MAIN VARIABLE WITH ALL THE INTERVALLIC POSSIBILITIES FOR ELET

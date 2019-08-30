@@ -8,7 +8,7 @@ THOROUGH TESTS OF THE ELET SYSTEM
 
 ;ATTENTION: MUST EVALUATE in-package AT THE BEGINNING!!!
 
-(in-package chroma)
+(in-package :cr)
 
 
 ;;;;;; MAIN SYSTEM ;;;;;;;;;;;;;;;;;;;;

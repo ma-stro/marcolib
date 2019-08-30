@@ -1,4 +1,4 @@
-(in-package cr)
+(in-package :cr)
 (defun get-xp (wanted-fq actual-fq)
 "return the transposition interval in midicents to achieve the wanted frequency from the actual frequency"
   (round

@@ -12,6 +12,32 @@
     (om::load-om-lib lib)))
 
 (in-package :cr)
+
+#|
+ '(
+   "marco-sources/ms-init"
+   "marco-sources/back-from-om"
+   "marco-sources/ms-globals"
+   "marco-sources/ms-utils"
+
+   "marco-sources/pls/dve"
+
+   "marco-sources/dg/ms-utils-dg"
+   "marco-sources/dg/DP"
+   "marco-sources/dg/DPV"
+   "marco-sources/dg/DPF"
+   "marco-sources/dg/lkp.lisp"
+   "marco-sources/dg/sp-dg.lisp"
+
+   "marco-sources/marco-classes/ad1m"
+   "marco-sources/marco-classes/ad1s"
+   "marco-sources/marco-classes/fm1m"
+
+   "marco-sources/userfuns/test-user-funs"
+|#
+
+
+; INITIALIZATIONS
 ;____________________________________________________________________________
 ; marcolib/marco-sources/ms-init.lisp
 ;____________________________________________________________________________
@@ -22,9 +48,10 @@
 
 ;(cl-user::decode-local-path "marcolib-tests.lisp")
 
+
+; SAME FUNCTIONS DEFINED IN OM (utils-from-chroma.lisp)
 ;____________________________________________________________________________
 ; marcolib/marco-sources/back-from-om.lisp
-; SAME FUNCTIONS DEFINED IN OM (utils-from-chroma.lisp)
 ;____________________________________________________________________________
 ;******************************************************************
 ;-------| CHROMA SYSTEM
@@ -94,6 +121,197 @@
 (closest-pwr2 4098)
 ;------------------------------------------------------------------
 
+
+; PERSONAL GLOBAL VARIABLE
+;____________________________________________________________________________
+; marcolib/marco-sources/ms-globals.lisp
+;____________________________________________________________________________
+;*******************************************************************
+;-------| CHROMA SYSTEM
+;-------| This file is: $MSsrc/my-globals.lisp
+;-------| Designed and implemented in LeLisp by Marco Stroppa 
+;-------| Ported to Common Lisp by Serge Lemouton
+;-------| Version: Nov 28, 1996
+;-------| Modified March 2000 (added dynamic functions in csound)
+;-------| Adapted to omChroma 050221, Marco Stroppa
+;*******************************************************************
+
+(in-package :cr)
+
+
+;******************************************************************
+; GLOBAL VARIABLES FOR WHOLE SYSTEM
+;------------------------------------------------------------------
+; MOVED TO OMCHROMA GLOBALS
+; TRANSPOSITION FACTORS FOR FUNCTION "xpose"
+;		UPWARD TRANSPOSITION
+#|
+(set-gbl 'xp2- (interval 100))
+(set-gbl 'xp2+ (interval 200))
+(set-gbl 'xp3- (interval 300))
+(set-gbl 'xp3+ (interval 400))
+(set-gbl 'xp4 (interval 500))
+(set-gbl 'xp4+ (interval 600))
+(set-gbl 'xp5- (interval 600))
+(set-gbl 'xp5 (interval 700))
+(set-gbl 'xp6- (interval 800)) 
+(set-gbl 'xp6+ (interval 900))
+(set-gbl 'xp7- (interval 1000))
+(set-gbl 'xp7+ (interval 1100))
+(set-gbl 'xp8 (interval 1200))
+(set-gbl 'xp9- (interval 1300))
+(set-gbl 'xp9+ (interval 1400))
+(set-gbl 'xp10- (interval 1500))
+(set-gbl 'xp10+ (interval 1600))
+(set-gbl 'xp11 (interval 1700))
+(set-gbl 'xp11+ (interval 1800))
+(set-gbl 'xp12- (interval 1800))
+(set-gbl 'xp12 (interval 1900))
+(set-gbl 'xp13- (interval 2000)) 
+(set-gbl 'xp13+ (interval 2100))
+(set-gbl 'xp14- (interval 2200))
+(set-gbl 'xp14+ (interval 2300))
+
+;		DOWNWARD TRANSPOSITION
+(set-gbl '-xp2- (interval -100))
+(set-gbl '-xp2+ (interval -200))
+(set-gbl '-xp3- (interval -300))
+(set-gbl '-xp3+ (interval -400))
+(set-gbl '-xp4 (interval -500))
+(set-gbl '-xp4+ (interval -600))
+(set-gbl '-xp5- (interval -600))
+(set-gbl '-xp5 (interval -700))
+(set-gbl '-xp6- (interval -800)) 
+(set-gbl '-xp6+ (interval -900))
+(set-gbl '-xp7- (interval -1000))
+(set-gbl '-xp7+ (interval -1100))
+(set-gbl '-xp8 (interval -1200))
+(set-gbl '-xp9- (interval -1300))
+(set-gbl '-xp9+ (interval -1400))
+(set-gbl '-xp10- (interval -1500))
+(set-gbl '-xp10+ (interval -1600))
+(set-gbl '-xp11 (interval -1700))
+(set-gbl '-xp11+ (interval -1800))
+(set-gbl '-xp12- (interval -1800))
+(set-gbl '-xp12 (interval -1900))
+(set-gbl '-xp13- (interval -2000)) 
+(set-gbl '-xp13+ (interval -2100))
+(set-gbl '-xp14- (interval -2200))
+(set-gbl '-xp14+ (interval -2300))
+|#
+
+;-----------------------------------------------------------------------------
+; values needed by dve
+(set-gbl 'GEN-MIN 1000)
+(set-gbl 'GEN-MAX 6999)
+(set-gbl 'GEN-CURR (get-gbl 'GEN-MIN))
+(set-gbl 'GEN-FILE *LLve*)
+;-----------------------------------------------------------------------------
+;(set-gbl 'WTDIR (catenate "/snd/" (getenv "USER")))
+				; DIR OF SOUND FILES ON MARC TO LOAD ON MOON
+; Temporary place for the dynamically computed GENS of a WT object
+(set-gbl 'WTL ())		; A-LIST OF WT OBJECTS
+(set-gbl 'WTIND 0)		; INDEX OF CURRENT WT OBJECT
+
+;		CSOUND STRUCTURE : '(	(sf1 dir1 f1 . n-smpls1)
+;					(sf2 dir2 f2 . n-smpls2) ...)
+;		MOON STRUCTURE   : '( (sf1) (sf2) ...)
+;		WHERE:	sfX = name of sound file 1, 2, etc.
+;			f1 = function number associated to that sound file
+;			for csound a f{fX} function will be associated to
+;			   input sf sndin.{position-in-A-list} [symbolic link]
+				; DIR OF SOUND FILES ON MARC TO LOAD ON MOON
+
+(set-gbl 'WTFO 7000)		; OFFSET WHEN WRITING CSOUND GEN 1 TABLES
+(set-gbl 'WTFOMAX 9999)		; MAXIMUM OFFSET WHEN WRITING CSOUND GEN 1
+                                ; PAY ATTENTION THAT IT IS NOT OVERLAPPING WITH
+                                ;  THE AUTOMATIC TABLE NUMBER IN OM PREFERENCES
+;(set-gbl 'DEFXFC ())		; DEFAULT CONTROL FOR INTERFACE OF WT SYSTEM
+
+;-----------------------------------------------------------------------------
+; CONTROL OF THE FREEZE ALGORITHM FOR WT OBJECTS
+;  PARAMETERS ARE RELATIVE TO A BASIC OVERLAP, SET TO 10% OF THE DURATION
+;    OF THE CURRENT WT OBJECT
+; SEE FILE wt-frz.ll IN $LLctl1 FOR DETAILS
+(set-gbl 'DEF-FRZ		;  DEFAULT FREEZE PARAMETERS
+   '(let ((ovlp (* (dur_wt (curr_wt) (my-si_wt)) 0.1)) )
+       `(
+	 (inc-pt (* ,ovlp 4.0))		; INCRUSTATION POINT
+	 (dur (ran (* ,ovlp 2.0)	; DURATION OF INCRUSTED SEGMENTS
+		   (* ,ovlp 0.5)) )
+	 (skip (ran (* ,ovlp 4.0)	; SKIP POINT FOR EACH NEW SEGMENT
+		    ,ovlp) )
+	 (end- ,ovlp)			; FINAL PORTION OF THE SOUND
+	 (ampfac 1.0)			; AMPLITUDE SCALER FOR EACH NEW SEGMENT
+	 (xin ,ovlp)			; IN/OUT CROSSFADES
+	 (xout ,ovlp)
+	 (first-xout ,ovlp)
+	 (last-xin ,ovlp)
+					; LAST-XOUT SET TO THE WHOLE DURATION
+					;    OF THE LAST SEGMENT
+	 (last-xout (- (seg-dur_wt) (seg-last-xin_wt)) )
+	 (min-xin (* (get-gbl 'DURMIN) 0.5) )	; MIN-XIN / XOUT FOR EXTREME
+	 (min-xout (* (get-gbl 'DURMIN) 0.5) )	;  TESTS
+;	 (min-xin 0.05)
+;	 (min-xout 0.05)
+	)
+     ))
+
+;TEST
+;(set-gbl 'DEF-FRZ		;  DEFAULT FREEZE PARAMETERS
+;     ''(
+;	 (inc-pt 0.1)
+;	 (dur 0.5)
+;	 (skip 0.2)
+;	 (end- 0.25)
+;	 (ampfac 0.5)
+;	 (xin 0.1)
+;	 (xout 0.15)
+;	 (first-xout 0.25)
+;	 (last-xin 0.2)
+;    ))
+(set-gbl 'FRZ-MODE 1)		; DEFAULT FREEZE MODE = RUN FREEZE WHEN NEEDED
+;-----------------------------------------------------------------------------
+; SPECIFICATIION OF THE DEFAULT INSTRUCTIONS FOR FOF AND FLT OBJECTS
+;    DEFAULTS ARE A-LISTS THAT CONTAIN ONLY ONE SAMPLE OF THE VALUE OF THE
+;    DEFAULT FIELD. THIS VALUE IS EVALUED EACH TIME IT IS RETRIEVED.
+;    NOTA: FIELDS THAT ARE NOT PRESENT IN BOTH THE LISP OBJECT AND THE DEFAULT
+;          INSTRUCTION WILL PRODUCE A GLOBAL ERROR MESSAGE
+#|
+(set-gbl 'DEF-FOF '(
+	(DUR 1.0)
+	(AMP 1.0)
+	(BAL (ran 0.5 0.5) )
+
+	(FQMOD (list 0.0 0.0 0.0 7) )	; amp-ran fq-ran d-fq fq-env
+
+	(CAMOD (list 0.0 0.0 0.0) )	; jitr atrm fqtrm
+	(CFMOD (list 0.5 0.0 0.0 7) )	; v/j fqvib d-fq fenv
+	(CFPRT (list 0.0 7 0.0 0.0 0.0) ) ; d-prt prt-env durprt modflg offset
+
+	(BWENV 7)
+	(BWMOD (list 0.0 0.0) )		; amp-ran fq-ran
+
+	(SKENV 7)
+	(SKMOD (list 0.0 0.0) )
+
+	(OCTENV 7)
+	(OCTMOD (list 0.0 0.0) )
+
+	(AMPIN 1.0)			; input scalers for amp and fq dep mod
+	(FQIN 1.0)
+
+	(TEXFLG 0 )			; value is normalized skirts
+	(DEBATTN (list -1 -1) )		; automatic computation in the instr
+	(OVLP -1)			; automatic computation in the instr
+
+  )
+)
+|#
+;*****************************************************************************
+
+
+; UTILITIES
 ;____________________________________________________________________________
 ; marcolib/marco-sources/ms-utils.lisp
 ;____________________________________________________________________________
@@ -128,7 +346,7 @@
 
 ;******************************************************************
 
-
+; ABSTRACT TYPES
 ;____________________________________________________________________________
 ; marcolib/marco-sources/pls/dve.lisp
 ;____________________________________________________________________________
@@ -301,6 +519,8 @@
 (compare-fun '(make_fun '(0 0 1 1 0.5 3)) ms-test-dve)
 ;*****************************************************************************
 
+; DG (Data Generation)
+; UTILITIES
 ;____________________________________________________________________________
 ; marcolib/marco-sources/dg/ms-utils-dg.lisp
 ;____________________________________________________________________________
@@ -351,7 +571,7 @@
 (build-fqwt '(1.0) '(1.059 (nth-freq_wt wt-a2 2)) '(440 261))
 ;-----------------------------------------------------------------------------
 
-
+; DATA AS POINTERS (BASIC)
 ;____________________________________________________________________________
 ; marcolib/marco-sources/dg/ms-DP.lisp
 ;____________________________________________________________________________
@@ -450,8 +670,6 @@
 ;	if upper limit > lower limit, swap them
 ;	return 1.0 if limits have not been swapped, -1.0 if so
 ;	upper and lower limits are dynamically bound to "from" and "to"
-; works only within a function that defines to / from
-;(adjust-limits)
 #|
 (defun adjust-limits ()
   (declare (special to from))
@@ -466,7 +684,6 @@
 ; (check-stp FUN)			; USE DYN SCOPING
 ;	if step is negative, reject instruction
 ;	FUN is the calling function
-;(check-stp (make_fun '(0 0 1 1 0 3)))
 #|
 (defun check-stp (fun)
   (declare (special stp))
@@ -536,83 +753,415 @@ CALLED BY: ~a~%"
 ; (build-cl FROM TO) / (build-bkwd-cl FROM TO)
 ;	prepare a control list (cl) made of integers between FROM and TO
 ;	bkwd: build a copy straightforward and backward
-; gives an infite list
-;(build-cl 10 20)
-;(build-bkwd-cl 10 20)
-#|
-(setf ress '(1 2 3))
-
-(firstn 10 (nconc (nreverse ress) ress))
-
-(defun build-cl (from to)
-  (let ((cnt from)
-        (result (list from)) )
-    (if (< from to)
-      (loop while (>= (decf to) from)
-            do (newl result (incf cnt)) )
-      (loop while (<= (incf to ) from)
-            do (newl result (decf cnt))) )
-    (nconc (setf result (nreverse result)) result)))
-
-(defun build-bkwd-cl (from to)
-  (let ((cnt from)
-        (result (list from)) )
-    (if (< from to)
-      (loop while (>= (decf to) from)
-            do (newl result (incf cnt)) )
-      (loop while (<= (incf to ) from)
-            do (newl result (decf cnt))) )
-    (setf result (nreverse result))
-    (nconc result (reverse result))
-    (nconc result result)))
-|#
+; gives an infinite list!!
+(firstn 100 (build-cl 10 20))
+(firstn 100 (build-bkwd-cl 10 20))
+(firstn 100 (build-bkwd-cl 20 10))
+(firstn 100 (build-bkwd1-cl 10 20))
 ;-----------------------------------------------------------------------------
+
+;____________________________________________________________________________
+; marcolib/marco-sources/dg/ms-DPV.lisp
+;*****************************************************************************
+;-------| DG SYSTEM
+;-------| This file is: $LLdg/DPV.ll
+;-------| Version V1.0: Jan 22, 1990
+;-------| By Marco Stroppa
+;-------| Copyright 1990 IRCAM
+;*****************************************************************************
+
+; THIS FILES CONTAINS ALL THE FUNCTIONS THAT GENERATE DATA PASSED AS POINTERS
+;    TO A DATA BASE
+
+(in-package :cr)
+;-----------------------------------------------------------------------------
+; AVAILABLE FUNCTIONS
+;    FUNCTIONS WITH CONTROL LIST (CL)
+;	p-l-val / pi-l-val	: list of vals (out-of-bound vals are clipped)
+;	p-mod-l-val / pi-mod-l-val
+;				:  "  "  " (out-of-bound vals are folded over)
+;	p-lp / pi-lp		: loop (with starting offset)
+;	p-bkwd-lp / pi-bkwd-lp	: backward loop
+;	p-rept-lp / pi-rept-lp
+;				: repetition with loop at the end
+;	p-bkwd-rept-lp / pi-bkwd-rept-lp
+;				: repetition with backward loop at the end
+;    FUNCTIONS WITH STEP (STP)
+;	p-rept / pi-rept	: repetition scaled to interval
+;	p-mod-rept / pi-mod-rept: repetition with loop modulo the size
+;	p-bkwd-mod-rept / pi-bkwd-mod-rept :
+;				: repetition with modulo back and forth
+;	p-stp-rept / pi-stp-rept
+;				: repetition with step and stop at the end
+;-----------------------------------------------------------------------------
+
+;-----------------------------------------------------------------------------
+; FUNCTIONS WITH CONTROL LIST
+;-----------------------------------------------------------------------------
+; (p-l-val / pi-l-val NEV CL DB [FROM TO])
+; 	if (length CL) < NEV, then repeat the last value until NEV
+;	   else give back the first NEV els pointed to by CL (control list)
+;	values in CL are relative to FROM and clipped by TO and FROM
+; EX: (setf db  '#(11 12 13 14 15 16 17 18 19))
+;     (setf  a  '(2 3 4)), (p-l-val 5 a db) ===> '(13 14 15 15 15)
+; REMARK: FROM and TO fields are always taken as FROM < TO
+(p-l-val 10 '(1 1.1 2 2.2 3 3.3 4 4.4 5 5.5) ms-test-dp)
+(p-l-val 3 '(0 1 2 3 4 5) ms-test-dp)
+(p-l-val 5 '(-1 0 1 2 3 4 5) ms-test-dp)
+(p-l-val 5 '(-1 0 1000 2 3 4 5) ms-test-dp)
+
+(pi-l-val 10 '(1 1.1 2 2.2 3 3.3 4 4.4 5 5.5) ms-test-dp)
+(pi-l-val 3 '(0.5 1.5 2.5 3.5 4.5 5.5) ms-test-dp)
+(pi-l-val 5 '(-1.5 0 1.5 2.5 3.5 4.5 5.5) ms-test-dp)
+(pi-l-val 5 '(-1 0 1000 2 3 4 5) ms-test-dp)
+
+(p-l-val 10 '(1 1.1 2 2.2 3 3.3 4 4.4 5 5.5) ms-test-dp 2 4)
+(p-l-val 3 '(0 1 2 3 4 5) ms-test-dp 2 5)
+(p-l-val 5 '(-1 0 1 2 3 4 5) ms-test-dp 2 5)
+(p-l-val 5 '(-1 0 1000 2 3 4 5) ms-test-dp 2 5)
+
+(pi-l-val 10 '(1 1.1 2 2.2 3 3.3 4 4.4 5 5.5) ms-test-dp 2 5)
+(pi-l-val 3 '(0.5 1.5 2.5 3.5 4.5 5.5) ms-test-dp 2 5)
+(pi-l-val 5 '(-1.5 0 1.5 2.5 3.5 4.5 5.5) ms-test-dp 2 5)
+(pi-l-val 5 '(-1 0 1000 2 3 4 5) ms-test-dp 2 5)
+;-----------------------------------------------------------------------------
+
+;-----------------------------------------------------------------------------
+; (p-mod-l-val / pi-mod-l-val NEV CL DB [FROM TO])
+; 	if (length CL) < NEV, then repeat the last value until NEV
+;	   else give back the first NEV els pointed to by CL (control list)
+;	values in CL are relative to FROM and folded over around TO and FROM
+; EX: (setf db #(11 12 13 14 15 16 17 18 19))
+;      (setf a '(2 3 4)), (p-mod-l-val 5 a db) ===> '(13 14 15 15 15)
+; REMARK: FROM and TO fields are always taken as FROM < TO
+
+(p-mod-l-val 10 '(1 1.1 2 2.2 3 3.3 4 4.4 5 5.5) ms-test-dp)
+(p-mod-l-val 10 '(0 1 2 3 4 5) ms-test-dp)
+(p-mod-l-val 5 '(-1 0 1 2 3 4 5) ms-test-dp)
+(p-mod-l-val 5 '(-1 0 1000 2 3 4 5) ms-test-dp)
+
+(pi-mod-l-val 10 '(1 1.1 2 2.2 3 3.3 4 4.4 5 5.5) ms-test-dp)
+(pi-mod-l-val 3 '(0.5 1.5 2.5 3.5 4.5 5.5) ms-test-dp)
+(pi-mod-l-val 5 '(-1.5 0 1.5 2.5 3.5 4.5 5.5) ms-test-dp)
+(pi-mod-l-val 5 '(-1 0 1000 2 3 4 5) ms-test-dp)
+
+(p-mod-l-val 10 '(1 1.1 2 2.2 3 3.3 4 4.4 5 5.5) ms-test-dp 2 4)
+(p-mod-l-val 3 '(0 1 2 3 4 5) ms-test-dp 2 5)
+(p-mod-l-val 5 '(-1 0 1 2 3 4 5) ms-test-dp 2 5)
+(p-mod-l-val 5 '(-1 0 1000 2 3 4 5) ms-test-dp 2 5)
+
+(pi-mod-l-val 10 '(1 1.1 2 2.2 3 3.3 4 4.4 5 5.5) ms-test-dp 2 5)
+(pi-mod-l-val 3 '(0.5 1.5 2.5 3.5 4.5 5.5) ms-test-dp 2 5)
+(pi-mod-l-val 5 '(-1.5 0 1.5 2.5 3.5 4.5 5.5) ms-test-dp 2 5)
+(pi-mod-l-val 5 '(-1 0 1000 2 3 4 5) ms-test-dp 2 5)
+;-----------------------------------------------------------------------------
+
+;-----------------------------------------------------------------------------
+; (p-lp / pi-lp NEV CL DB [FROM TO OFFS])
+; 	loop along the pointers contained in CL (control list)
+;	else return the first NEV els pointed to by CL starting loop at OFFS
+;	values in CL are relative to FROM and clipped by TO and FROM
+
+; if NEV > (length <control-list>), start again from the beginning
+
+(p-lp 20 '(1 1.1 2 2.2 3 3.3 4 4.4 5 5.5) ms-test-dp)
+(p-lp 20 '(0 1 2 3 4 5) ms-test-dp)
+(p-lp 20 '(-1 0 1 2 3 4 5) ms-test-dp)
+(p-lp 20 '(-1 0 1000 2 3 4 5) ms-test-dp)
+
+(pi-lp 10 '(1 1.1 2 2.2 3 3.3 4 4.4 5 5.5) ms-test-dp)
+(pi-lp 10 '(0.5 1.5 2.5 3.5 4.5 5.5) ms-test-dp)
+(pi-lp 10 '(-1.5 0 1.5 2.5 3.5 4.5 5.5) ms-test-dp)
+(pi-lp 10 '(-1 0 1000 2 3 4 5) ms-test-dp)
+
+(p-lp 10 '(1 1.1 2 2.2 3 3.3 4 4.4 5 5.5) ms-test-dp 2 4)
+(p-lp 10 '(0 1 2 3 4 5) ms-test-dp 2 5)
+(p-lp 10 '(-1 0 1 2 3 4 5) ms-test-dp 2 5)
+(p-lp 10 '(-1 0 1000 2 3 4 5) ms-test-dp 2 5)
+
+(pi-lp 10 '(1 1.1 2 2.2 3 3.3 4 4.4 5 5.5) ms-test-dp 2 5)
+(pi-lp 10 '(0.5 1.5 2.5 3.5 4.5 5.5) ms-test-dp 2 5)
+(pi-lp 10 '(-1.5 0 1.5 2.5 3.5 4.5 5.5) ms-test-dp 2 5)
+(pi-lp 10 '(-1 0 1000 2 3 4 5) ms-test-dp 2 5)
+;-----------------------------------------------------------------------------
+
+;-----------------------------------------------------------------------------
+; (p-bkwd-lp / pi-bkwd-lp NEV CL DB [FROM TO OFFS])
+; 	loop along the values contained in CL going backward and forward
+;	   between FROM and TO in data base DB starting at OFFS
+; EX: (setf a '(1 2 3)), (pi-bkwd-lp 10 a db) ===> '(1 2 3 3 2 1 1 2 3 3)
+(p-bkwd-lp 20 '(1 1.1 2 2.2 3 3.3 4 4.4 5 5.5) ms-test-dp)
+(p-bkwd-lp 20 '(0 1 2 3 4 5) ms-test-dp)
+(p-bkwd-lp 20 '(-1 0 1 2 3 4 5) ms-test-dp)
+(p-bkwd-lp 20 '(-1 0 1000 2 3 4 5) ms-test-dp)
+
+(pi-bkwd-lp 10 '(1 1.1 2 2.2 3 3.3 4 4.4 5 5.5) ms-test-dp)
+(pi-bkwd-lp 10 '(0.5 1.5 2.5 3.5 4.5 5.5) ms-test-dp)
+(pi-bkwd-lp 10 '(-1.5 0 1.5 2.5 3.5 4.5 5.5) ms-test-dp)
+(pi-bkwd-lp 10 '(-1 0 1000 2 3 4 5) ms-test-dp)
+
+(p-bkwd-lp 10 '(1 1.1 2 2.2 3 3.3 4 4.4 5 5.5) ms-test-dp 2 4)
+(p-bkwd-lp 10 '(0 1 2 3 4 5) ms-test-dp 2 5)
+(p-bkwd-lp 10 '(-1 0 1 2 3 4 5) ms-test-dp 2 5)
+(p-bkwd-lp 10 '(-1 0 1000 2 3 4 5) ms-test-dp 2 5)
+
+(pi-bkwd-lp 10 '(1 1.1 2 2.2 3 3.3 4 4.4 5 5.5) ms-test-dp 2 5)
+(pi-bkwd-lp 10 '(0.5 1.5 2.5 3.5 4.5 5.5) ms-test-dp 2 5)
+(pi-bkwd-lp 10 '(-1.5 0 1.5 2.5 3.5 4.5 5.5) ms-test-dp 2 5)
+(pi-bkwd-lp 10 '(-1 0 1000 2 3 4 5) ms-test-dp 2 5)
+;-----------------------------------------------------------------------------
+
+;-----------------------------------------------------------------------------
+; (p-rept-lp / pi-rept-lp NEV CL DB [FROM TO])
+; 	return the values pointed to by CL with looping at the end
+;       CL must be of the form '(1 2 3 4 (7 8 9))
+;	scale reading to interval TO-FROM
+; EX: (setf a '(1 2 3 (7 8))), (p-rept-lp 10 a db) ===> '(1 2 3 7 8 7 8 7 8 7)
+; NEW 1908
+;     if the list has no loop parentheses at the end, NO ERROR IS SIGNALED, and the last
+;        value is repeated
+
+(p-rept-lp 20 '(1 1.1 2 2.2 3 3.3 (4 4.4 5 5.5)) ms-test-dp)
+(p-rept-lp 20 '(0 1 2 3 (4 5)) ms-test-dp)
+(p-rept-lp 20 '(-1 0 1 2 (3 4 5)) ms-test-dp)
+(p-rept-lp 20 '(-1 0 1000 2 (3000 4 5)) ms-test-dp)
+
+(pi-rept-lp 20 '(1 1.1 2 2.2 3 (3.3 4 (4.4 5 5.5))) ms-test-dp)
+(pi-rept-lp 10 '(0.5 1.5 2.5 3.5 (4.5 5.5)) ms-test-dp)
+(pi-rept-lp 10 '(-1.5 0 1.5 2.5 (3.5 4.5 5.5)) ms-test-dp)
+(pi-rept-lp 10 '(-1 0 1000 2 3 (4 5)) ms-test-dp)
+
+(p-rept-lp 10 '(1 1.1 2 2.2 3 3.3 4 4.4 5 5.5) ms-test-dp 2 4)
+(p-rept-lp 10 '(0 1 2 3 4 5) ms-test-dp 2 5)
+(p-rept-lp 10 '(-1 0 1 2 3 4 5) ms-test-dp 2 5)
+(p-rept-lp 10 '(-1 0 1000 2 3 4 5) ms-test-dp 2 5)
+
+(pi-rept-lp 10 '(1 1.1 2 2.2 3 3.3 4 4.4 5 5.5) ms-test-dp 2 5)
+(pi-rept-lp 10 '(0.5 1.5 2.5 3.5 4.5 5.5) ms-test-dp 2 5)
+(pi-rept-lp 10 '(-1.5 0 1.5 2.5 3.5 4.5 5.5) ms-test-dp 2 5)
+(pi-rept-lp 10 '(-1 0 1000 2 3 4 5) ms-test-dp 2 5)
+;-----------------------------------------------------------------------------
+
+;-----------------------------------------------------------------------------
+; (p-bkwd-rept-lp / pi-bkwd-rept-lp NEV CL DB [FROM TO])
+; 	return the values pointed to by CL with backward looping at the end
+;	scale reading to interval TO-FROM
+
+(p-bkwd-rept-lp 20 '(1 1.1 2 2.2 3 3.3 (4 4.4 5 5.5)) ms-test-dp)
+(p-bkwd-rept-lp 20 '(0 1 2 3 (4 5)) ms-test-dp)
+(p-bkwd-rept-lp 20 '(-1 0 1 2 (3 4 5)) ms-test-dp)
+(p-bkwd-rept-lp 20 '(-1 0 1000 2 (3000 4 5)) ms-test-dp)
+
+(pi-bkwd-rept-lp 20 '(1 1.1 2 2.2 3 (3.3 4 (4.4 5 5.5))) ms-test-dp)
+(pi-bkwd-rept-lp 10 '(0.5 1.5 2.5 3.5 (4.5 5.5)) ms-test-dp)
+(pi-bkwd-rept-lp 10 '(-1.5 0 1.5 2.5 (3.5 4.5 5.5)) ms-test-dp)
+(pi-bkwd-rept-lp 10 '(-1 0 1000 2 3 (4 5)) ms-test-dp)
+
+(p-bkwd-rept-lp 10 '(1 1.1 2 2.2 3 3.3 4 4.4 5 5.5) ms-test-dp 2 4)
+(p-bkwd-rept-lp 10 '(0 1 2 3 4 5) ms-test-dp 2 5)
+(p-bkwd-rept-lp 10 '(-1 0 1 2 3 4 5) ms-test-dp 2 5)
+(p-bkwd-rept-lp 10 '(-1 0 1000 2 3 4 5) ms-test-dp 2 5)
+
+(pi-bkwd-rept-lp 10 '(1 1.1 2 2.2 3 3.3 4 4.4 5 5.5) ms-test-dp 2 5)
+(pi-bkwd-rept-lp 10 '(0.5 1.5 2.5 3.5 4.5 5.5) ms-test-dp 2 5)
+(pi-bkwd-rept-lp 10 '(-1.5 0 1.5 2.5 3.5 4.5 5.5) ms-test-dp 2 5)
+(pi-bkwd-rept-lp 10 '(-1 0 1000 2 3 4 5) ms-test-dp 2 5)
+;-----------------------------------------------------------------------------
+
+;-----------------------------------------------------------------------------
+; FUNCTIONS WITH STEP
+;-----------------------------------------------------------------------------
+; (p-rept / pi-rept NEV DB [FROM TO])
+; 	read into DB with equally spaced steps NEV values
+;	scale reading to interval TO-FROM
+; EX: (pi-rept 10 db) ===> read all the db step by step for 10 times
+(p-rept 30 ms-test-dp)
+(p-rept 30 ms-test-dp 2 8)
+
+(pi-rept 30 ms-test-dp)
+(pi-rept 30 ms-test-dp 2 8)
+;-----------------------------------------------------------------------------
+
+;-----------------------------------------------------------------------------
+; (p-stp-rept / pi-stp-rept NEV STP DB [FROM TO])
+; 	read into DB with equally spaced steps of STP NEV values
+;	repeat last value until NEV if needed
+(p-stp-rept 30 2.1 ms-test-dp)
+(pi-stp-rept 30 2.1 ms-test-dp)
+;-----------------------------------------------------------------------------
+; (p-mod-rept / pi-mod-rept NEV STP DB [FROM TO OFFS])
+; 	loop along the DB between FROM and TO at a step STP
+;	start loop at OFFS (must always be positive from FROM)
+(p-mod-rept 30 2.1 ms-test-dp)
+(pi-mod-rept 30 2.1 ms-test-dp)
+
+(p-mod-rept 30 2.1 ms-test-dp 2 9)
+(pi-mod-rept 30 2.1 ms-test-dp 2 9)
+;-----------------------------------------------------------------------------
+; (p-bkwd-mod-rept / pi-bkwd-mod-rept NEV STP DB [FROM TO OFFS])
+; 	loop along the DB back and forth between FROM and TO at a step STP
+;	start loop at OFFS (must always be positive from FROM)
+(p-bkwd-mod-rept 30 2.1 ms-test-dp)
+(pi-bkwd-mod-rept 30 2.1 ms-test-dp)
+
+(p-bkwd-mod-rept 30 2.1 ms-test-dp 2 9)
+(pi-bkwd-mod-rept 30 2.1 ms-test-dp 2 9)
+;-----------------------------------------------------------------------------
+
+
 
 ;____________________________________________________________________________
 ; marcolib/marco-sources/dg/ms-DPF.lisp
 ;____________________________________________________________________________
+;*****************************************************************************
+;-------| DG SYSTEM
+;-------| This file is: $LLdg/DPF.ll
+;-------| Version V1.0: Jan 22, 1990
+;-------| By Marco Stroppa
+;-------| Copyright 1990 IRCAM
+;*****************************************************************************
 
-;____________________________________________________________________________
-; marcolib/marco-sources/dg/ms-DV.lisp
-;____________________________________________________________________________
+; THIS FILE CONTAINS ALL THE FUNCTIONS THAT GENERATE DATA PASSED AS POINTERS
+;    TO A DATA BASE
 
-;____________________________________________________________________________
-; marcolib/marco-sources/dg/ms-DPV.lisp
-;____________________________________________________________________________
+(in-package :cr)
 
+;-----------------------------------------------------------------------------
+; AVAILABLE FUNCTIONS
+;	p-lkp / pi-lkp		: linear interpolation (fit to db)
+;-----------------------------------------------------------------------------
+
+;-----------------------------------------------------------------------------
+; (p-lkp / pi-lkp NEV CFUN DB [FROM TO])
+; 	sample CFUN NEV equally spaced times and use result as a ptr into DB
+(p-lkp 31 (make_fun '(0 0 1 1 0 2)) ms-test-dp)
+(pi-lkp 31 (make_fun '(0 0 1 1 0 2)) ms-test-dp)
+
+(p-lkp 31 (make_fun '(0 0 1 1 0 2)) ms-test-dp 2 8)
+(pi-lkp 31 (make_fun '(0 0 1 1 0 2)) ms-test-dp 2 8)
+;-----------------------------------------------------------------------------
+
+
+; LOOK-UP FUNCTIONS
 ;____________________________________________________________________________
 ; marcolib/marco-sources/dg/lkp.lisp
 ;____________________________________________________________________________
+;*****************************************************************************
+;-------| DG SYSTEM
+;-------| This file is: $LLdg/lkp.ll
+;-------| Version V1.0: Jan 22, 1990
+;-------| By Marco Stroppa
+;-------| Copyright 1990 IRCAM
+;*****************************************************************************
+
+; THIS FILES CONTAINS FUNCTIONS TO GENERATE OTHER CONTROL FUNCTIONS (TYPE FUN)
+;	IN AN EFFICIENT AND CATEGORICAL WAY
+
+(in-package :cr)
+;-----------------------------------------------------------------------------
+; AVAILABLE FUNCTIONS
+;	make-lkp3a
+;	make-lkp3b
+;-----------------------------------------------------------------------------
+
+;-----------------------------------------------------------------------------
+; (make-lkp3a Y_START Y_END MIDDLE)
+;	generate a two-segment function going from Y_START to Y_END and
+;	   passing through Y_MIDDLE
+;	MIDDLE	= (Y_MIDDLE . X_MIDDLE)
+; EX: (make-lkp3a 0.2 '(1.0 0.3) 0.3)
+(make-lkp3a 0.2 '(1.0 0.3) 0.3)
+(make-lkp3a (ran 0.2 0.05) (list 1.0 (ran 0.3 0.04)) (ran 0.3 0.1))
+;-----------------------------------------------------------------------------
+
+;-----------------------------------------------------------------------------
+; (make-lkp3b Y_START Y_END MIDDLE [CTL])
+;	generate a six-segment function going from Y_START to Y_END and
+;	   passing through Y_MIDDLE
+;	each segment Y_START - Y_MIDDLE and Y_MIDDLE - Y_END is subdivided
+;	   into three parts, Y_START -> Y1a -> Y1b -> Y_MIDDLE, etc.
+;	MIDDLE	= (Y_MIDDLE . X_MIDDLE)
+;	CTL	= ((Y1-scl . Y2-scl) (X1-scl . X2-scl))
+;	   default: ((0.3 . 0.7) (0.66 . 0.33))
+; EX: (make-lkp3b 0.2 '(1.0 0.3) 0.3)
+; EX: (make-lkp3b 0.2 '(1.0 0.3) 0.3 '(0.1 . 0.9) '(0.4 . 0.2) )
+(make-lkp3b 0.2 '(1.0 0.3) 0.3)
+(make-lkp3b 0.2 '(1.0 0.3) 0.3 '(0.1 . 0.9) '(0.2 . 0.4) )
+;-----------------------------------------------------------------------------
 
 ;____________________________________________________________________________
 ; marcolib/marco-sources/dg/sp-dg.lisp
 ;____________________________________________________________________________
+;*****************************************************************************
+;-------| DG SYSTEM
+;-------| This file is: $LLdg/sp-dg.ll
+;-------| Version V1.0: Jan 22, 1990
+;-------| By Marco Stroppa
+;-------| Copyright 1990 IRCAM
+;*****************************************************************************
 
+; THIS FILES CONTAINS SPECIAL-PURPOSE FUNCTIONS TO USE WITH DG SYS
 
+(in-package :cr)
+;-----------------------------------------------------------------------------
+; AVAILABLE FUNCTIONS
+;	chk-dur
+;	p-ve
+;-----------------------------------------------------------------------------
 
-;____________________________________________________________________________
-; marcolib/marco-sources/vps/ms-ELET-REFERENCE.lisp
-;____________________________________________________________________________
+;-----------------------------------------------------------------------------
+; (chk-dur DUR AT GBL-DUR)
+;	check the DURation of an event starting at time AT, and clip it with
+;	GBL-DUR
+(chk-dur 1.0 0.0 0.5)
+(chk-dur 1.0 0.0 1.5)
+;-----------------------------------------------------------------------------
+
+;-----------------------------------------------------------------------------
+; (p-ve VAL DB [FROM TO])
+;	extract 1 item from a data-base of virtual envelopes (type ve)
+;       argument x is FROM / TO fields of p-l-val
+; EX: (setf db #(f-11 f-12 f-13))
+;      (p-ve 0 db) ===> (eval f-11)
+(setf ms-test-ve #(ve-11 ve-12 ve-13 ve-14 ve-15 ve-16))
+(setf ve-11 (make_ve (make_fun '(0 0 1 1)) 101))
+(setf ve-12 (make_ve (make_fun '(1 0 0 1)) 102))
+(setf ve-13 (make_ve (make_fun '(0 0 1 1 0 2)) 103))
+(setf ve-14 (make_ve (make_fun '(0 0 1 1 0 2)) 104))
+(setf ve-15 (make_ve (make_fun '(0 0 1 1 0 2)) 105))
+(setf ve-16 (make_ve (make_fun '(0 0 1 1 0 2)) 106))
+
+(p-ve 0 ms-test-ve)
+(p-ve 1 ms-test-ve)
+(p-ve -1 ms-test-ve)
+(p-ve 4 ms-test-ve)
+(p-ve 0 ms-test-ve 2 4)
+;-----------------------------------------------------------------------------
 
 
 ;____________________________________________________________________________
 ; marcolib/marco-sources/vps/ms-elet=sys.lisp
 ;____________________________________________________________________________
 
+;____________________________________________________________________________
+; marcolib/marco-sources/vps/ms-ELET-REFERENCE.lisp
+;____________________________________________________________________________
 
 ;____________________________________________________________________________
-; marcolib/marco-sources/vps/ms-set-theory.lisp
+; marcolib/marco-sources/vps/ms-ms-get-xp.lisp
 ;____________________________________________________________________________
-
 
 ;____________________________________________________________________________
 ; marcolib/marco-sources/vps/ms-ms-set-theory-database.lisp
 ;____________________________________________________________________________
 
 
+
+
 ;____________________________________________________________________________
-; marcolib/marco-sources/vps/ms-ms-get-xp.lisp
+; marcolib/marco-sources/vps/ms-set-theory.lisp
 ;____________________________________________________________________________
+
 
 
 

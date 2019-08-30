@@ -183,9 +183,11 @@ CALLED BY: ~a~%"
   (nreverse result))
 
 ;-----------------------------------------------------------------------------
-; (build-cl FROM TO) / (build-bkwd-cl FROM TO)
+; (build-cl FROM TO) / (build-bkwd-cl FROM TO) / (build-bkwd1-cl FROM TO)
 ;	prepare a control list (cl) made of integers between FROM and TO
 ;	bkwd: build a copy straightforward and backward
+;	bkwd1: build a copy straightforward and backward but DOES NOT repeat the last element
+
 (defun build-cl (from to)
   (let ((cnt from)
         (result (list from)) )
@@ -206,5 +208,17 @@ CALLED BY: ~a~%"
             do (newl result (decf cnt))) )
     (setf result (nreverse result))
     (nconc result (reverse result))
+    (nconc result result)))
+
+(defun build-bkwd1-cl (from to)
+  (let ((cnt from)
+        (result (list from)) )
+    (if (< from to)
+      (loop while (>= (decf to) from)
+            do (newl result (incf cnt)) )
+      (loop while (<= (incf to ) from)
+            do (newl result (decf cnt))) )
+    (setf result (nreverse result))
+    (nconc result (cdr (reverse (cdr result))))
     (nconc result result)))
 ;-----------------------------------------------------------------------------

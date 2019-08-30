@@ -26,6 +26,22 @@
 
    "marco-sources/dg/ms-utils-dg"
    "marco-sources/dg/DP"
+   "marco-sources/dg/DPV"
+   "marco-sources/dg/DPF"
+   "marco-sources/dg/lkp.lisp"
+   "marco-sources/dg/sp-dg.lisp"
+
+
+
+;   "marco-sources/models/synthetic-model.lisp"
+;   "marco-sources/models/utils-models.lisp"
+;   "marco-sources/models/ms-methods.lisp" - EMPTY AT THE MOMENT
+
+   "marco-sources/vps/ms-elet-sys.lisp"
+   "marco-sources/vps/ms-ELET-REFERENCE.lisp"
+   "marco-sources/vps/ms-get-xp.lisp"
+   "marco-sources/vps/ms-set-theory-database.lisp"
+   "marco-sources/vps/ms-set-theory.lisp"
 
    "marco-sources/marco-classes/ad1m"
    "marco-sources/marco-classes/ad1s"
