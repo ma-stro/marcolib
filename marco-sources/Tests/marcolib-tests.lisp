@@ -470,7 +470,7 @@
 (reset_dve ms-test-dve)
 (print_dve ms-test-dve)
 
-(csgen->fun
+;(csgen->fun
 
 ;------------------------------------------------------------------
 ;	NAME:		is_dve, is-empty_dve  (PREDICATE)
